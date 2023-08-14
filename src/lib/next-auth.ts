@@ -28,6 +28,9 @@ export const nextAuthOptions: NextAuthOptions = {
       return session
     },
   },
+  pages: {
+    signIn: '/',
+  },
   providers: [
     GoogleProvider({
       clientId: env.GOOGLE_CLIENT_ID,
@@ -38,7 +41,7 @@ export const nextAuthOptions: NextAuthOptions = {
       clientSecret: env.GITHUB_CLIENT_SECRET,
     }),
   ],
-  secret: env.NEXT_AUTH_SECRET,
+  secret: env.NEXTAUTH_SECRET,
   session: {
     strategy: 'jwt',
   },

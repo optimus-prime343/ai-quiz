@@ -25,22 +25,16 @@ import { useToast } from '../ui/use-toast'
 interface Props {
   user: Session['user']
 }
-const UserMenu = ({ user }: Props) => {
+export const UserMenu = ({ user }: Props) => {
   const { toast } = useToast()
   const handleLogout = () => {
-    signOut()
-      .then(() =>
-        toast({
-          title: 'Logged out!',
-        }),
-      )
-      .catch(error => {
-        console.error(error)
-        toast({
-          description: 'Something went wrong.Please try again later',
-          title: 'Logout failed',
-        })
+    signOut({ callbackUrl: '/' }).catch(error => {
+      console.error(error)
+      toast({
+        description: 'Something went wrong.Please try again later',
+        title: 'Logout failed',
       })
+    })
   }
 
   return (
@@ -86,5 +80,3 @@ const UserMenu = ({ user }: Props) => {
     </Popover>
   )
 }
-
-export default UserMenu

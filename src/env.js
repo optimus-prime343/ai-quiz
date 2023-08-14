@@ -9,7 +9,8 @@ const envSchema = z.object({
   GITHUB_CLIENT_SECRET: z.string(),
   GOOGLE_CLIENT_ID: z.string(),
   GOOGLE_CLIENT_SECRET: z.string(),
-  NEXT_AUTH_SECRET: z.string(),
+  NEXTAUTH_SECRET: z.string(),
+  NEXTAUTH_URL: z.string().default('http://localhost:3000/'),
 })
 
 const parsed = envSchema.safeParse(process.env)

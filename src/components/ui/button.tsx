@@ -1,5 +1,6 @@
 import { cn } from '@/lib/cn'
 import { Slot } from '@radix-ui/react-slot'
+import { IconReload } from '@tabler/icons-react'
 import { type VariantProps, cva } from 'class-variance-authority'
 import * as React from 'react'
 
@@ -37,17 +38,39 @@ export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean
+  isLoading?: boolean
+  lefetIcon?: React.ReactNode
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ asChild = false, className, size, variant, ...props }, ref) => {
+  (
+    {
+      asChild = false,
+      children,
+      className,
+      isLoading,
+      lefetIcon,
+      size,
+      variant,
+      ...props
+    },
+    ref,
+  ) => {
     const Comp = asChild ? Slot : 'button'
     return (
       <Comp
         className={cn(buttonVariants({ className, size, variant }))}
+        disabled={isLoading}
         ref={ref}
         {...props}
-      />
+      >
+        {isLoading ? (
+          <IconReload className='mr-4 h-4 w-4 animate-spin' />
+        ) : (
+          lefetIcon ?? null
+        )}
+        {children}
+      </Comp>
     )
   },
 )

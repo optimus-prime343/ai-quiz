@@ -14,7 +14,7 @@ export const Navbar = async () => {
       <div className='container'>
         <nav className='flex items-center justify-between'>
           <Link href={session?.user ? '/dashboard' : '/'}>
-            <h2 className='rounded-md border-b-4 border-l-2 border-r-[24px] border-t-2 border-zinc-900 px-4 py-3 text-4xl font-bold transition-all dark:border-zinc-300'>
+            <h2 className='rounded-md border-b-4 border-l-2 border-r-[24px] border-t-2 border-zinc-900 px-4 py-3 text-2xl font-bold transition-all dark:border-zinc-300'>
               {APP_NAME}
             </h2>
           </Link>

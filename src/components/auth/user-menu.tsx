@@ -1,6 +1,7 @@
 'use client'
 import type { Session } from 'next-auth'
 
+import { getUiAvatar } from '@/utils/ui-avatar'
 import { IconLogout } from '@tabler/icons-react'
 import { signOut } from 'next-auth/react'
 import React from 'react'
@@ -46,7 +47,7 @@ const UserMenu = ({ user }: Props) => {
     <Popover>
       <PopoverTrigger>
         <Avatar>
-          <AvatarImage src={user.image ?? undefined} />
+          <AvatarImage src={user.image ?? getUiAvatar(user.name)} />
           <AvatarFallback>P</AvatarFallback>
         </Avatar>
       </PopoverTrigger>

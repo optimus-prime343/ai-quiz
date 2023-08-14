@@ -1,5 +1,4 @@
 import { getAuthSession } from '@/lib/next-auth'
-import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 
@@ -14,14 +13,9 @@ export const Navbar = async () => {
       <div className='container'>
         <nav className='flex items-center justify-between'>
           <Link href='/'>
-            <Image
-              alt='Logo'
-              className='text-red-900'
-              height={50}
-              src='/next.svg'
-              title='AI QUIZ'
-              width={50}
-            />
+            <h2 className='rounded-md border-b-4 border-l-2 border-r-[24px] border-t-2 border-zinc-900 px-4 py-3 text-4xl font-bold transition-all dark:border-zinc-300'>
+              AI QUIZ
+            </h2>
           </Link>
           <ul className='flex items-center gap-4'>
             <li>

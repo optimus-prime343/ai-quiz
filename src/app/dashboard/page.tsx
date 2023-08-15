@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 }
 const Dashboard = () => {
   return (
-    <main className='container py-4'>
+    <>
       <h2 className='text-2xl font-bold tracking-tighter'>Dashboard</h2>
       <div className='mt-4 grid gap-4 md:grid-cols-2'>
         <QuizMeCard />
@@ -21,7 +21,7 @@ const Dashboard = () => {
         <HotTopicsCard className='col-span-4' />
         <RecentActivityCard className='col-span-4 lg:col-span-3' />
       </div>
-    </main>
+    </>
   )
 }
 

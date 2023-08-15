@@ -10,7 +10,7 @@ import { ToggleThemeMenu } from './theme/toggle-theme-menu'
 export const Navbar = async () => {
   const session = await getAuthSession()
   return (
-    <header className='sticky left-0 top-0 z-10 w-full border-b border-b-border py-2'>
+    <header className='sticky left-0 top-0 z-10 w-full border-b border-b-border bg-background py-2'>
       <div className='container'>
         <nav className='flex items-center justify-between'>
           <Link href={session?.user ? '/dashboard' : '/'}>

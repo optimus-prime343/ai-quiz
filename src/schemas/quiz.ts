@@ -8,7 +8,7 @@ export const createQuizSchema = z.object({
     .string()
     .min(4, { message: 'Topic must be at least 4 characters long' })
     .max(20),
-  type: z.enum(['mcq', 'open-ended']),
+  type: z.enum(['mcq', 'open_ended']),
 })
 
 export type CreateQuizInput = z.infer<typeof createQuizSchema>

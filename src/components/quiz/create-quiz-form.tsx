@@ -2,6 +2,7 @@
 import { type CreateQuizInput, createQuizSchema } from '@/schemas/quiz'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { IconBook, IconCopy } from '@tabler/icons-react'
+import { useSearchParams } from 'next/navigation'
 import React from 'react'
 import { useForm } from 'react-hook-form'
 
@@ -25,10 +26,11 @@ import {
 import { Input } from '../ui/input'
 
 export const CreateQuizForm = () => {
+  const searchParams = useSearchParams()
   const form = useForm<CreateQuizInput>({
     defaultValues: {
       amount: 5,
-      topic: '',
+      topic: searchParams.get('topic') ?? '',
       type: 'mcq',
     },
     resolver: zodResolver(createQuizSchema),
@@ -100,11 +102,11 @@ export const CreateQuizForm = () => {
               </Button>
               <Button
                 variant={
-                  form.watch('type') === 'open-ended' ? 'default' : 'outline'
+                  form.watch('type') === 'open_ended' ? 'default' : 'outline'
                 }
                 className='flex-1'
                 lefetIcon={<IconBook className='mr-2 h-4 w-4' />}
-                onClick={() => form.setValue('type', 'open-ended')}
+                onClick={() => form.setValue('type', 'open_ended')}
                 type='button'
               >
                 Open Ended

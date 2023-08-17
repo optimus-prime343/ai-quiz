@@ -11,6 +11,7 @@ const envSchema = z.object({
   GOOGLE_CLIENT_SECRET: z.string(),
   NEXTAUTH_SECRET: z.string(),
   NEXTAUTH_URL: z.string().default('http://localhost:3000/'),
+  OPENAI_API_KEY: z.string(),
 })
 
 const parsed = envSchema.safeParse(process.env)

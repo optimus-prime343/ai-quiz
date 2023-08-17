@@ -13,9 +13,14 @@ export const CustomWordCloud = () => {
   const router = useRouter()
   return (
     <D3WordCloud
+      onWordClick={(event, word) =>
+        router.push(`/dashboard/quiz?topic=${word.text}`)
+      }
       data={data}
+      font='Times'
+      fontSize={word => Math.log2(word.value) * 5}
       height={300}
-      onWordClick={word => router.push(`/dashboard/quiz?topic=${word}`)}
+      padding={5}
       rotate={0}
     />
   )

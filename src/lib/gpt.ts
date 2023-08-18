@@ -64,7 +64,7 @@ class GPT {
         question: z.string(),
       }),
     )
-    const userPrompt = `Generate ${amount} open ended questions on the topic of ${topic}`
+    const userPrompt = `Generate ${amount} open ended questions along with their answers on the topic of ${topic}`
     const functions = [
       {
         description: 'Generate certain open ended questions for certain topic',

@@ -47,7 +47,7 @@ export const POST = async (req: Request, _res: Response) => {
       )
       await db.question.createMany({ data: openEndedQuestions })
     }
-    return NextResponse.redirect(`/dashboard/game/${game.id}`)
+    return NextResponse.json({ gameId: game.id })
   } catch (error) {
     if (error instanceof ZodError)
       return NextResponse.json(

@@ -1,8 +1,12 @@
 'use client'
+import type { CreateQuizResponse } from '@/schemas/quiz'
+
+import { api } from '@/lib/api-client'
 import { type CreateQuizInput, createQuizSchema } from '@/schemas/quiz'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { IconBook, IconCopy } from '@tabler/icons-react'
-import { useSearchParams } from 'next/navigation'
+import { useMutation } from '@tanstack/react-query'
+import { useRouter, useSearchParams } from 'next/navigation'
 import React from 'react'
 import { useForm } from 'react-hook-form'
 
@@ -26,6 +30,14 @@ import {
 import { Input } from '../ui/input'
 
 export const CreateQuizForm = () => {
+  const router = useRouter()
+  const { isLoading, mutate } = useMutation<
+    CreateQuizResponse,
+    Error,
+    CreateQuizInput
+  >({
+    mutationFn: input => api.createNewGame(input),
+  })
   const searchParams = useSearchParams()
   const form = useForm<CreateQuizInput>({
     defaultValues: {
@@ -37,7 +49,14 @@ export const CreateQuizForm = () => {
   })
 
   const onSubmit = (input: CreateQuizInput) => {
-    alert(JSON.stringify(input, null, 4))
+    mutate(input, {
+      onSuccess: ({ gameId }) => {
+        const url = new URL('/dashboard/play', 'http://localhost:3000')
+        url.searchParams.append('type', input.type)
+        url.searchParams.append('gameId', gameId)
+        router.push(url.toString())
+      },
+    })
   }
   return (
     <Card className='min-w-[95vw] md:min-w-fit'>
@@ -114,7 +133,8 @@ export const CreateQuizForm = () => {
             </div>
             <Button
               className='w-full'
-              disabled={!form.formState.isValid}
+              disabled={!form.formState.isValid || isLoading}
+              isLoading={isLoading}
               type='submit'
             >
               Create quiz

@@ -38,7 +38,7 @@ class GPT {
         question: z.string(),
       }),
     )
-    const userPrompt = `Generate an array of ${amount} mcq quiz questions in the json for the topic of ${topic}.`
+    const userPrompt = `Generate an array of ${amount} challenging mcq quiz questions in the json format for the topic of ${topic}.`
     const functions = [
       {
         description: `Generate certain mcq questions on certain topics`,

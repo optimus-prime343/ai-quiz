@@ -1,6 +1,7 @@
 import type { GameType } from '@prisma/client'
 
 import { MCQ } from '@/components/game/mcq'
+import { OpenEnded } from '@/components/game/open-ended'
 import { db } from '@/lib/db'
 import { getAuthSession } from '@/lib/next-auth'
 import { redirect } from 'next/navigation'
@@ -16,6 +17,7 @@ const Play = async ({ searchParams }: Props) => {
     include: {
       questions: {
         select: {
+          answer: true,
           id: true,
           options: true,
           question: true,
@@ -31,7 +33,11 @@ const Play = async ({ searchParams }: Props) => {
   if (!game) return redirect('/dashboard/quiz')
   return (
     <section className='fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2'>
-      {searchParams.type === 'mcq' ? <MCQ game={game} /> : null}
+      {searchParams.type === 'mcq' ? (
+        <MCQ game={game} />
+      ) : (
+        <OpenEnded game={game} />
+      )}
     </section>
   )
 }

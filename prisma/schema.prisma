@@ -81,7 +81,7 @@ model Question {
   gameId        String?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
-  answers       Answer[]
+  userAnswer    Answer?
 
   @@index([gameId])
 }
@@ -91,7 +91,7 @@ model Answer {
   percentageCorrect Float?
   answer            String?
   correct           Boolean?
-  questionId        String
+  questionId        String   @unique
   question          Question @relation(references: [id], fields: [questionId], onDelete: Cascade)
   userId            String
   user              User     @relation(references: [id], fields: [userId], onDelete: Cascade)

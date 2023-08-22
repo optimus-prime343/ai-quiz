@@ -1,8 +1,9 @@
 import { db } from '@/lib/db'
 import { getAuthSession } from '@/lib/next-auth'
-import { checkMcqAnswerSchema } from '@/schemas/quiz'
+import { checkOpenEndedAnswerSchema } from '@/schemas/quiz'
 import { StatusCodes, getReasonPhrase } from 'http-status-codes'
 import { NextResponse } from 'next/server'
+import { stringSimilarity } from 'string-similarity-js'
 import { ZodError } from 'zod'
 
 export const GET = async (req: Request, _res: Response) => {
@@ -10,30 +11,47 @@ export const GET = async (req: Request, _res: Response) => {
     const session = await getAuthSession()
     if (!session?.user)
       return NextResponse.json(
-        { message: 'Unauthorized' },
+        { message: getReasonPhrase(StatusCodes.UNAUTHORIZED) },
         { status: StatusCodes.UNAUTHORIZED },
       )
     const url = new URL(req.url)
-    const params = {
+    const body = {
+      answer: url.searchParams.get('answer'),
       questionId: url.searchParams.get('questionId'),
-      selectedOption: url.searchParams.get('selectedOption'),
     }
-    const { questionId, selectedOption } = checkMcqAnswerSchema.parse(params)
+    const { answer, questionId } = checkOpenEndedAnswerSchema.parse(body)
     const question = await db.question.findUnique({
       where: {
-        correctOption: selectedOption,
         id: questionId,
       },
     })
+    if (!question)
+      return NextResponse.json(
+        { message: 'Question not found' },
+        { status: StatusCodes.BAD_REQUEST },
+      )
+    const answerSimilarity = stringSimilarity(question.answer ?? '', answer)
+    const answerSimilarityInPercentage = Math.round(answerSimilarity * 100)
+    const existingAnswer = await db.answer.findUnique({
+      where: {
+        questionId: question.id,
+        userId: session.user.id,
+      },
+    })
+    if (existingAnswer)
+      return NextResponse.json(
+        { message: "You can't answer already answered question" },
+        { status: StatusCodes.BAD_REQUEST },
+      )
     await db.answer.create({
       data: {
-        answer: selectedOption,
-        correct: !!question,
+        answer,
+        percentageCorrect: answerSimilarityInPercentage,
         questionId,
         userId: session.user.id,
       },
     })
-    return NextResponse.json({ correct: !!question })
+    return NextResponse.json({ answerSimilarity: answerSimilarityInPercentage })
   } catch (error) {
     console.error(error)
     if (error instanceof ZodError) {

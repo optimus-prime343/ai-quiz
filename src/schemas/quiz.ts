@@ -21,9 +21,25 @@ export const checkMcqAnswerResponseSchema = z.object({
   correct: z.boolean(),
 })
 
+export const checkOpenEndedAnswerSchema = z.object({
+  answer: z.string(),
+  questionId: z.string(),
+})
+
+export const checkOpenEndedAnswerResponseSchema = z.object({
+  answerSimilarity: z.number(),
+})
+
 export type CreateQuizInput = z.infer<typeof createQuizSchema>
 export type CreateQuizResponse = z.infer<typeof createQuizResponseSchema>
 export type CheckMcqAnswerInput = z.infer<typeof checkMcqAnswerSchema>
 export type CheckMcqAnswerResponse = z.infer<
   typeof checkMcqAnswerResponseSchema
+>
+
+export type CheckOpenEndedAnswerInput = z.infer<
+  typeof checkOpenEndedAnswerSchema
+>
+export type CheckOpenEndedAnswerResponse = z.infer<
+  typeof checkOpenEndedAnswerResponseSchema
 >

@@ -1,3 +1,4 @@
+import type { HotGameTopic } from '@/schemas/game'
 import type { ComponentProps } from 'react'
 
 import React from 'react'
@@ -9,11 +10,14 @@ import {
   CardHeader,
   CardTitle,
 } from '../ui/card'
-import { CustomWordCloud } from './custom-word-cloud'
+import { HotGameTopicsCloud } from './hot-game-topics-cloud'
 
-export const HotTopicsCard = (props: ComponentProps<typeof Card>) => {
+export interface Props extends ComponentProps<typeof Card> {
+  hotGameTopics: HotGameTopic[]
+}
+export const HotTopicsCard = ({ hotGameTopics, ...rest }: Props) => {
   return (
-    <Card {...props}>
+    <Card {...rest}>
       <CardHeader>
         <CardTitle className='text-2xl font-bold'>Hot Topics</CardTitle>
         <CardDescription>
@@ -21,7 +25,7 @@ export const HotTopicsCard = (props: ComponentProps<typeof Card>) => {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <CustomWordCloud />
+        <HotGameTopicsCloud hotGameTopics={hotGameTopics} />
       </CardContent>
     </Card>
   )

@@ -1,10 +1,16 @@
-import type { CheckMcqAnswerInput } from '@/schemas/quiz'
+import type { EndGameInput } from '@/schemas/game'
+import type {
+  CheckMcqAnswerInput,
+  CheckOpenEndedAnswerInput,
+} from '@/schemas/quiz'
 import type { AxiosInstance, AxiosRequestConfig, Method } from 'axios'
 import type { z } from 'zod'
 
+import { endGameResponseSchema } from '@/schemas/game'
 import {
   type CreateQuizInput,
   checkMcqAnswerResponseSchema,
+  checkOpenEndedAnswerResponseSchema,
   createQuizResponseSchema,
 } from '@/schemas/quiz'
 import axios from 'axios'
@@ -39,9 +45,22 @@ class ApiClient {
       { params: input },
     )
   }
+  async checkOpenEndedAnswer(input: CheckOpenEndedAnswerInput) {
+    return this.#request(
+      checkOpenEndedAnswerResponseSchema,
+      '/open-ended/check-answer',
+      'GET',
+      { params: input },
+    )
+  }
 
   async createNewGame(input: CreateQuizInput) {
     return this.#request(createQuizResponseSchema, '/game', 'POST', {
+      data: input,
+    })
+  }
+  async endGame(input: EndGameInput) {
+    return this.#request(endGameResponseSchema, '/game/end-game', 'PATCH', {
       data: input,
     })
   }

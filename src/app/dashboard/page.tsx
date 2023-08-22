@@ -13,8 +13,15 @@ export const metadata: Metadata = {
 }
 const Dashboard = async () => {
   const session = await getAuthSession()
-  const userGames = await db.game.findMany({
+  const recentGames = await db.game.findMany({
+    orderBy: { createdAt: 'desc' },
+    take: 5,
     where: { userId: session?.user?.id },
+  })
+  const totalGames = await db.game.count({
+    where: {
+      userId: session?.user.id,
+    },
   })
   const games = await db.game.findMany({ select: { topic: true } })
   const uniqueTopics = Array.from(new Set(games.map(game => game.topic)))
@@ -40,7 +47,8 @@ const Dashboard = async () => {
         />
         <RecentActivityCard
           className='col-span-4 lg:col-span-3'
-          games={userGames}
+          recentGames={recentGames}
+          totalGames={totalGames}
         />
       </div>
     </>

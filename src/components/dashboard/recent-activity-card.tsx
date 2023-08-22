@@ -19,21 +19,26 @@ import { ScrollArea } from '../ui/scroll-area'
 import { Separator } from '../ui/separator'
 
 export interface Props extends ComponentProps<typeof Card> {
-  games: Game[]
+  recentGames: Game[]
+  totalGames: number
 }
-export const RecentActivityCard = ({ games, ...rest }: Props) => {
+export const RecentActivityCard = ({
+  recentGames,
+  totalGames,
+  ...rest
+}: Props) => {
   return (
     <Card {...rest}>
       <CardHeader>
         <CardTitle className='text-2xl font-bold'>Recent Activity</CardTitle>
         <CardDescription>
-          You have played a total of {games.length} games
+          You have played a total of {totalGames} games
         </CardDescription>
       </CardHeader>
       <CardContent>
         <ScrollArea className='h-[500px] pb-2'>
           <div className='space-y-2'>
-            {games.map(game => (
+            {recentGames.map(game => (
               <Card key={game.id}>
                 <CardHeader>
                   <CardTitle className='flex flex-wrap items-center justify-between gap-2'>
@@ -54,7 +59,12 @@ export const RecentActivityCard = ({ games, ...rest }: Props) => {
                     </Link>
                   </CardTitle>
                   <CardDescription>
-                    <Separator className='my-3' />
+                    <Separator
+                      asChild
+                      className='my-3 block'
+                    >
+                      <span />
+                    </Separator>
                     <span>
                       Started on {dayjs(game.startedOn).format('lll')}
                     </span>

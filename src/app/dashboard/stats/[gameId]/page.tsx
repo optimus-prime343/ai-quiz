@@ -38,7 +38,6 @@ const DashboardStats = async (props: Props) => {
     const secondsPerQuestion =
       dayjs(game.endedOn).diff(game.startedOn, 'seconds') /
       game.questions.length
-    console.log({ secondsPerQuestion })
     const accuracy =
       ((game.type === 'mcq'
         ? estimatedSecondsForMCQ

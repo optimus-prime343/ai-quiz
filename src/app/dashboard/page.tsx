@@ -5,12 +5,17 @@ import { HotTopicsCard } from '@/components/dashboard/hot-topics-card'
 import { QuizMeCard } from '@/components/dashboard/quiz-me-card'
 import { RecentActivityCard } from '@/components/dashboard/recent-activity-card'
 import { db } from '@/lib/db'
+import { getAuthSession } from '@/lib/next-auth'
 import React from 'react'
 
 export const metadata: Metadata = {
   title: 'Dashboard',
 }
 const Dashboard = async () => {
+  const session = await getAuthSession()
+  const userGames = await db.game.findMany({
+    where: { userId: session?.user?.id },
+  })
   const games = await db.game.findMany({ select: { topic: true } })
   const uniqueTopics = Array.from(new Set(games.map(game => game.topic)))
   const hotGameTopics = await Promise.all(
@@ -33,7 +38,10 @@ const Dashboard = async () => {
           className='col-span-4'
           hotGameTopics={hotGameTopics}
         />
-        <RecentActivityCard className='col-span-4 lg:col-span-3' />
+        <RecentActivityCard
+          className='col-span-4 lg:col-span-3'
+          games={userGames}
+        />
       </div>
     </>
   )

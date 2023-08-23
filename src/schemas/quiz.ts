@@ -14,6 +14,7 @@ export const createQuizSchema = z.object({
 export const createQuizResponseSchema = z.object({ gameId: z.string() })
 
 export const checkMcqAnswerSchema = z.object({
+  nextQuestionIndex: z.coerce.number().nullable(),
   questionId: z.string(),
   selectedOption: z.string(),
 })
@@ -23,6 +24,7 @@ export const checkMcqAnswerResponseSchema = z.object({
 
 export const checkOpenEndedAnswerSchema = z.object({
   answer: z.string(),
+  nextQuestionIndex: z.coerce.number().nullable(),
   questionId: z.string(),
 })
 

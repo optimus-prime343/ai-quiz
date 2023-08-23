@@ -17,9 +17,11 @@ export const GET = async (req: Request, _res: Response) => {
     const url = new URL(req.url)
     const body = {
       answer: url.searchParams.get('answer'),
+      nextQuestionIndex: url.searchParams.get('nextQuestionIndex'),
       questionId: url.searchParams.get('questionId'),
     }
-    const { answer, questionId } = checkOpenEndedAnswerSchema.parse(body)
+    const { answer, nextQuestionIndex, questionId } =
+      checkOpenEndedAnswerSchema.parse(body)
     const question = await db.question.findUnique({
       where: {
         id: questionId,
@@ -38,11 +40,11 @@ export const GET = async (req: Request, _res: Response) => {
         userId: session.user.id,
       },
     })
-    if (existingAnswer)
-      return NextResponse.json(
-        { message: "You can't answer already answered question" },
-        { status: StatusCodes.BAD_REQUEST },
-      )
+    if (existingAnswer) {
+      await db.answer.delete({
+        where: { questionId: question.id, userId: session.user.id },
+      })
+    }
     await db.answer.create({
       data: {
         answer,
@@ -51,6 +53,12 @@ export const GET = async (req: Request, _res: Response) => {
         userId: session.user.id,
       },
     })
+    if (question.gameId) {
+      await db.game.update({
+        data: { pausedQuestionIndex: nextQuestionIndex },
+        where: { id: question.gameId, userId: session.user.id },
+      })
+    }
     return NextResponse.json({ answerSimilarity: answerSimilarityInPercentage })
   } catch (error) {
     console.error(error)

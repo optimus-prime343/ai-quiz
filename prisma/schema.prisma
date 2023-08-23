@@ -56,16 +56,17 @@ enum GameType {
 }
 
 model Game {
-  id        String     @id @default(uuid())
-  userId    String
-  user      User       @relation(references: [id], fields: [userId], onDelete: Cascade)
-  startedOn DateTime
-  endedOn   DateTime?
-  topic     String
-  type      GameType
-  questions Question[]
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+  id                  String     @id @default(uuid())
+  userId              String
+  user                User       @relation(references: [id], fields: [userId], onDelete: Cascade)
+  startedOn           DateTime
+  endedOn             DateTime?
+  topic               String
+  type                GameType
+  pausedQuestionIndex Int?       @default(0)
+  questions           Question[]
+  createdAt           DateTime   @default(now())
+  updatedAt           DateTime   @updatedAt
 
   @@index([userId])
 }

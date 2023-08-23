@@ -55,6 +55,10 @@ export const MCQ = ({ game }: Props) => {
     if (activeOptionIndex === undefined) return
     checkMcqAnswer.mutate(
       {
+        nextQuestionIndex:
+          activeQuestionIndex === game.questions.length - 1
+            ? null
+            : activeQuestionIndex + 1,
         questionId: question.id,
         selectedOption: options[activeOptionIndex],
       },

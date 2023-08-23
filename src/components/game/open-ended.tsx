@@ -36,7 +36,9 @@ export const OpenEnded = ({ game }: Props) => {
     mutationFn: input => api.endGame(input),
   })
 
-  const [activeQuestionIndex, setActiveQuestionIndex] = useState(0)
+  const [activeQuestionIndex, setActiveQuestionIndex] = useState(
+    game.pausedQuestionIndex ?? 0,
+  )
   const [blankAnswer, setBlankAnswer] = useState('')
   const [gameEnded, setGameEnded] = useState(false)
   const [now, setNow] = useState(() => new Date())
@@ -59,7 +61,14 @@ export const OpenEnded = ({ game }: Props) => {
         input.value = ''
       })
     checkAnswer.mutate(
-      { answer: filledAnswer, questionId: question.id },
+      {
+        answer: filledAnswer,
+        nextQuestionIndex:
+          activeQuestionIndex === game.questions.length - 1
+            ? null
+            : activeQuestionIndex + 1,
+        questionId: question.id,
+      },
       {
         onSuccess: ({ answerSimilarity }) => {
           toast({
@@ -110,6 +119,7 @@ export const OpenEnded = ({ game }: Props) => {
     )
   return (
     <div className='space-y-4'>
+      <pre>{game.pausedQuestionIndex}</pre>
       <Badge>Topic {game.topic}</Badge>
       <Progress value={progress} />
       <div>

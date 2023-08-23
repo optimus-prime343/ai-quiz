@@ -15,16 +15,32 @@ export const GET = async (req: Request, _res: Response) => {
       )
     const url = new URL(req.url)
     const params = {
+      nextQuestionIndex: url.searchParams.get('nextQuestionIndex'),
       questionId: url.searchParams.get('questionId'),
       selectedOption: url.searchParams.get('selectedOption'),
     }
-    const { questionId, selectedOption } = checkMcqAnswerSchema.parse(params)
+    const { nextQuestionIndex, questionId, selectedOption } =
+      checkMcqAnswerSchema.parse(params)
     const question = await db.question.findUnique({
       where: {
         correctOption: selectedOption,
         id: questionId,
       },
     })
+    if (!question)
+      return NextResponse.json(
+        { message: 'Question not found' },
+        { status: StatusCodes.BAD_REQUEST },
+      )
+    const existingAnswer = await db.answer.findUnique({
+      where: {
+        questionId: question.id,
+        userId: session.user.id,
+      },
+    })
+    if (existingAnswer) {
+      await db.answer.delete({ where: { id: existingAnswer.id } })
+    }
     await db.answer.create({
       data: {
         answer: selectedOption,
@@ -33,6 +49,12 @@ export const GET = async (req: Request, _res: Response) => {
         userId: session.user.id,
       },
     })
+    if (question.gameId) {
+      await db.game.update({
+        data: { pausedQuestionIndex: nextQuestionIndex },
+        where: { id: question.gameId },
+      })
+    }
     return NextResponse.json({ correct: !!question })
   } catch (error) {
     console.error(error)

@@ -1,5 +1,9 @@
 import type { Answer, Question } from '@prisma/client'
 
+import { IconInfoCircle } from '@tabler/icons-react'
+
+import { TextDiff } from '../text-diff'
+import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
 import {
   Table,
   TableBody,
@@ -21,7 +25,20 @@ export const QuestionAnswersTable = ({ questions }: Props) => {
         <TableRow>
           <TableHead className='w-[5vw]'>No.</TableHead>
           <TableHead className='w-[55vw]'>Question and answers</TableHead>
-          <TableHead className='w-[40vw]'>Your answer</TableHead>
+          <TableHead className='flex w-[40vw] items-center gap-2'>
+            Your answer{' '}
+            <Popover>
+              <PopoverTrigger asChild>
+                <IconInfoCircle className='cursor-pointer' />
+              </PopoverTrigger>
+              <PopoverContent>
+                <p>
+                  <span className='font-bold text-red-700'>Red color</span> on
+                  your text refers to the missing words from your answer.
+                </p>
+              </PopoverContent>
+            </Popover>
+          </TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -33,7 +50,10 @@ export const QuestionAnswersTable = ({ questions }: Props) => {
               <p className='text-muted-foreground'>{question.answer}</p>
             </TableCell>
             <TableCell className='text-green-700 dark:text-green-300'>
-              {question?.userAnswer?.answer ?? ''}
+              <TextDiff
+                newString={question?.userAnswer?.answer ?? ''}
+                oldString={question.answer ?? ''}
+              />
             </TableCell>
           </TableRow>
         ))}

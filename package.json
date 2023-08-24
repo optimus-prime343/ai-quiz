@@ -37,6 +37,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "dayjs": "^1.11.9",
+    "diff": "^5.1.0",
     "eslint": "^8.47.0",
     "eslint-config-next": "13.4.13",
     "http-status-codes": "^2.2.0",
@@ -60,6 +61,7 @@
     "zod-to-json-schema": "^3.21.4"
   },
   "devDependencies": {
+    "@types/diff": "^5.0.3",
     "@typescript-eslint/eslint-plugin": "^6.3.0",
     "@typescript-eslint/parser": "^6.3.0",
     "eslint-config-prettier": "^9.0.0",

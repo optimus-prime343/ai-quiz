@@ -1,3 +1,5 @@
+import type { NextRequest } from 'next/server'
+
 import { db } from '@/lib/db'
 import { getAuthSession } from '@/lib/next-auth'
 import { checkMcqAnswerSchema } from '@/schemas/quiz'
@@ -5,7 +7,7 @@ import { StatusCodes, getReasonPhrase } from 'http-status-codes'
 import { NextResponse } from 'next/server'
 import { ZodError } from 'zod'
 
-export const GET = async (req: Request, _res: Response) => {
+export const GET = async (req: NextRequest, _res: NextResponse) => {
   try {
     const session = await getAuthSession()
     if (!session?.user)
@@ -13,11 +15,10 @@ export const GET = async (req: Request, _res: Response) => {
         { message: 'Unauthorized' },
         { status: StatusCodes.UNAUTHORIZED },
       )
-    const url = new URL(req.url)
     const params = {
-      nextQuestionIndex: url.searchParams.get('nextQuestionIndex'),
-      questionId: url.searchParams.get('questionId'),
-      selectedOption: url.searchParams.get('selectedOption'),
+      nextQuestionIndex: req.nextUrl.searchParams.get('nextQuestionIndex'),
+      questionId: req.nextUrl.searchParams.get('questionId'),
+      selectedOption: req.nextUrl.searchParams.get('selectedOption'),
     }
     const { nextQuestionIndex, questionId, selectedOption } =
       checkMcqAnswerSchema.parse(params)

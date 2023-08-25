@@ -1,10 +1,12 @@
+import type { NextRequest } from 'next/server'
+
 import { gpt } from '@/lib/gpt'
 import { createQuizSchema } from '@/schemas/quiz'
 import { StatusCodes, getReasonPhrase } from 'http-status-codes'
 import { NextResponse } from 'next/server'
 import { ZodError } from 'zod'
 
-export const POST = async (req: Request, _res: Response) => {
+export const POST = async (req: NextRequest, _res: NextResponse) => {
   try {
     const body = await req.json()
     const parsedBody = createQuizSchema.parse(body)

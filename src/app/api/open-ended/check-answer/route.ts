@@ -1,3 +1,5 @@
+import type { NextRequest } from 'next/server'
+
 import { db } from '@/lib/db'
 import { getAuthSession } from '@/lib/next-auth'
 import { checkOpenEndedAnswerSchema } from '@/schemas/quiz'
@@ -6,7 +8,7 @@ import { NextResponse } from 'next/server'
 import { stringSimilarity } from 'string-similarity-js'
 import { ZodError } from 'zod'
 
-export const GET = async (req: Request, _res: Response) => {
+export const GET = async (req: NextRequest, _res: NextResponse) => {
   try {
     const session = await getAuthSession()
     if (!session?.user)
@@ -14,11 +16,10 @@ export const GET = async (req: Request, _res: Response) => {
         { message: getReasonPhrase(StatusCodes.UNAUTHORIZED) },
         { status: StatusCodes.UNAUTHORIZED },
       )
-    const url = new URL(req.url)
     const body = {
-      answer: url.searchParams.get('answer'),
-      nextQuestionIndex: url.searchParams.get('nextQuestionIndex'),
-      questionId: url.searchParams.get('questionId'),
+      answer: req.nextUrl.searchParams.get('answer'),
+      nextQuestionIndex: req.nextUrl.searchParams.get('nextQuestionIndex'),
+      questionId: req.nextUrl.searchParams.get('questionId'),
     }
     const { answer, nextQuestionIndex, questionId } =
       checkOpenEndedAnswerSchema.parse(body)

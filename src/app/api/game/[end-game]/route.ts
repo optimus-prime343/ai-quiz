@@ -1,3 +1,5 @@
+import type { NextRequest } from 'next/server'
+
 import { db } from '@/lib/db'
 import { getAuthSession } from '@/lib/next-auth'
 import { endGameRequestSchema } from '@/schemas/game'
@@ -5,7 +7,7 @@ import { StatusCodes, getReasonPhrase } from 'http-status-codes'
 import { NextResponse } from 'next/server'
 import { ZodError } from 'zod'
 
-export const PATCH = async (req: Request, _res: Response) => {
+export const PATCH = async (req: NextRequest, _res: NextResponse) => {
   try {
     const session = await getAuthSession()
     if (!session?.user)

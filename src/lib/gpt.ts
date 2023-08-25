@@ -1,30 +1,27 @@
-import type { ChatCompletionFunctions } from 'openai'
-
 import { env } from '@/env'
-import { OpenAIApi } from 'openai'
-import { Configuration } from 'openai'
+import OpenAI from 'openai'
 import { z } from 'zod'
 import { zodToJsonSchema } from 'zod-to-json-schema'
 
+type ChatCompletionFunction =
+  OpenAI.Chat.Completions.CompletionCreateParams.Function
 interface ChatCompletionInput {
-  functions: ChatCompletionFunctions[]
+  functions: ChatCompletionFunction[]
   userPrompt: string
 }
 
 class GPT {
-  #configuration: Configuration
-  #openAi: OpenAIApi
+  #openAi: OpenAI
   constructor() {
-    this.#configuration = new Configuration({ apiKey: env.OPENAI_API_KEY })
-    this.#openAi = new OpenAIApi(this.#configuration)
+    this.#openAi = new OpenAI({ apiKey: env.OPENAI_API_KEY })
   }
   async #createChatCompletion(input: ChatCompletionInput): Promise<string> {
-    const completion = await this.#openAi.createChatCompletion({
+    const completion = await this.#openAi.chat.completions.create({
       functions: input.functions,
       messages: [{ content: input.userPrompt, role: 'user' }],
       model: 'gpt-3.5-turbo-0613',
     })
-    const data = completion.data.choices[0].message?.function_call?.arguments
+    const data = completion.choices[0].message?.function_call?.arguments
     if (!data)
       throw new Error('Unable to create completion.Please try again later')
     return data
@@ -49,7 +46,7 @@ class GPT {
           type: 'object',
         },
       },
-    ] satisfies ChatCompletionFunctions[]
+    ] satisfies ChatCompletionFunction[]
     const completion = await this.#createChatCompletion({
       functions,
       userPrompt,
@@ -75,7 +72,7 @@ class GPT {
           type: 'object',
         },
       },
-    ] satisfies ChatCompletionFunctions[]
+    ] satisfies ChatCompletionFunction[]
     const completion = await this.#createChatCompletion({
       functions,
       userPrompt,

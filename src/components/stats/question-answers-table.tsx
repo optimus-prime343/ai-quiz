@@ -32,9 +32,15 @@ export const QuestionAnswersTable = ({ questions }: Props) => {
                 <IconInfoCircle className='cursor-pointer' />
               </PopoverTrigger>
               <PopoverContent>
-                <p>
-                  <span className='font-bold text-red-700'>Red color</span> on
-                  your text refers to the missing words from your answer.
+                <p className='text-sm'>
+                  <span className='font-bold text-red-700'>Red color</span>
+                  {' - '}
+                  Correct word
+                </p>
+                <p className='text-sm'>
+                  <span className='font-bold text-green-700'>Green color</span>
+                  {' - '}
+                  Your word
                 </p>
               </PopoverContent>
             </Popover>
@@ -49,7 +55,7 @@ export const QuestionAnswersTable = ({ questions }: Props) => {
               <h4 className='mb-2'>{question.question}</h4>
               <p className='text-muted-foreground'>{question.answer}</p>
             </TableCell>
-            <TableCell className='text-green-700 dark:text-green-300'>
+            <TableCell>
               <TextDiff
                 newString={question?.userAnswer?.answer ?? ''}
                 oldString={question.answer ?? ''}

@@ -22,10 +22,7 @@ export const GET = async (req: Request, _res: Response) => {
     const { nextQuestionIndex, questionId, selectedOption } =
       checkMcqAnswerSchema.parse(params)
     const question = await db.question.findUnique({
-      where: {
-        correctOption: selectedOption,
-        id: questionId,
-      },
+      where: { id: questionId },
     })
     if (!question)
       return NextResponse.json(
@@ -41,10 +38,11 @@ export const GET = async (req: Request, _res: Response) => {
     if (existingAnswer) {
       await db.answer.delete({ where: { id: existingAnswer.id } })
     }
+    const isCorrect = question.correctOption === selectedOption
     await db.answer.create({
       data: {
         answer: selectedOption,
-        correct: !!question,
+        correct: isCorrect,
         questionId,
         userId: session.user.id,
       },
@@ -55,7 +53,7 @@ export const GET = async (req: Request, _res: Response) => {
         where: { id: question.gameId },
       })
     }
-    return NextResponse.json({ correct: !!question })
+    return NextResponse.json({ correct: isCorrect })
   } catch (error) {
     console.error(error)
     if (error instanceof ZodError) {

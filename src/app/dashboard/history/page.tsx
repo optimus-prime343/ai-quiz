@@ -1,4 +1,5 @@
 import { RecentActivityItem } from '@/components/dashboard/recent-activity-item'
+import { EmptyDataView } from '@/components/empty-data-view'
 import { buttonVariants } from '@/components/ui/button'
 import { db } from '@/lib/db'
 import { getAuthSession } from '@/lib/next-auth'
@@ -27,6 +28,7 @@ const History = async ({ searchParams }: Props) => {
     take: perPage,
     where: { userId: session?.user.id },
   })
+  if (games.length === 0) return <EmptyDataView />
   return (
     <div className='space-y-4'>
       <div className='space-x-2'>

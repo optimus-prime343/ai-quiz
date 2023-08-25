@@ -3,6 +3,7 @@ import type { ComponentProps } from 'react'
 
 import React from 'react'
 
+import { EmptyDataView } from '../empty-data-view'
 import {
   Card,
   CardContent,
@@ -25,7 +26,11 @@ export const HotTopicsCard = ({ hotGameTopics, ...rest }: Props) => {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <HotGameTopicsCloud hotGameTopics={hotGameTopics} />
+        {hotGameTopics.length === 0 ? (
+          <EmptyDataView />
+        ) : (
+          <HotGameTopicsCloud hotGameTopics={hotGameTopics} />
+        )}
       </CardContent>
     </Card>
   )

@@ -3,6 +3,7 @@ import type { ComponentProps } from 'react'
 
 import React from 'react'
 
+import { EmptyDataView } from '../empty-data-view'
 import {
   Card,
   CardContent,
@@ -31,16 +32,20 @@ export const RecentActivityCard = ({
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <ScrollArea className='h-[500px] pb-2'>
-          <div className='space-y-2'>
-            {recentGames.map(game => (
-              <RecentActivityItem
-                game={game}
-                key={game.id}
-              />
-            ))}
-          </div>
-        </ScrollArea>
+        {recentGames.length === 0 ? (
+          <EmptyDataView />
+        ) : (
+          <ScrollArea className='h-[500px] pb-2'>
+            <div className='space-y-2'>
+              {recentGames.map(game => (
+                <RecentActivityItem
+                  game={game}
+                  key={game.id}
+                />
+              ))}
+            </div>
+          </ScrollArea>
+        )}
       </CardContent>
     </Card>
   )

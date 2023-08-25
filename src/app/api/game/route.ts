@@ -49,14 +49,15 @@ export const POST = async (req: Request, _res: Response) => {
     }
     return NextResponse.json({ gameId: game.id })
   } catch (error) {
+    console.error(error)
     if (error instanceof ZodError)
       return NextResponse.json(
         { message: error.issues },
         { status: StatusCodes.BAD_REQUEST },
       )
+    return NextResponse.json(
+      { message: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR) },
+      { status: StatusCodes.INTERNAL_SERVER_ERROR },
+    )
   }
-  return NextResponse.json(
-    { message: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR) },
-    { status: StatusCodes.INTERNAL_SERVER_ERROR },
-  )
 }

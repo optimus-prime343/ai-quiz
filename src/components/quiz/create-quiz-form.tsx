@@ -51,7 +51,10 @@ export const CreateQuizForm = () => {
   const onSubmit = (input: CreateQuizInput) => {
     mutate(input, {
       onSuccess: ({ gameId }) => {
-        const url = new URL('/dashboard/play', 'http://localhost:3000')
+        const url = new URL(
+          '/dashboard/play',
+          process.env.VERCEL_URL ?? 'http://localhost:3000',
+        )
         url.searchParams.append('type', input.type)
         url.searchParams.append('gameId', gameId)
         router.push(url.toString())

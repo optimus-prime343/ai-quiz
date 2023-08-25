@@ -10,7 +10,7 @@ const envSchema = z.object({
   GOOGLE_CLIENT_ID: z.string(),
   GOOGLE_CLIENT_SECRET: z.string(),
   NEXTAUTH_SECRET: z.string(),
-  NEXTAUTH_URL: z.string().default('http://localhost:3000/'),
+  NEXTAUTH_URL: z.string().optional().default('http://localhost:3000/'),
   OPENAI_API_KEY: z.string(),
 })
 

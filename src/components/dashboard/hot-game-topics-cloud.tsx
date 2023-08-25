@@ -9,6 +9,7 @@ export interface Props {
 }
 export const HotGameTopicsCloud = ({ hotGameTopics }: Props) => {
   const router = useRouter()
+  if (typeof window === 'undefined') return null
   return (
     <D3WordCloud
       onWordClick={(event, word) =>
